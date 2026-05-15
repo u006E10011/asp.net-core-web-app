@@ -1,8 +1,103 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model DevLog.ViewModels.HomeIndexViewModel
+@{
+    ViewData["Title"] = "Главная";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="feed-shell">
+    <div class="feed-column">
+        <div class="page-intro">
+            <p class="page-intro__eyebrow">Developer journal</p>
+            <h1 class="page-intro__title">Лента DevLog</h1>
+            <p class="page-intro__text">
+                Локальная площадка для записей разработки с хранением контента в PostgreSQL,
+                быстрым поиском по хештегам и визуальным рейтингом постов.
+            </p>
+        </div>
+
+        <section class="filter-card">
+            <div>
+                <p class="filter-card__label">Поиск по хештегу</p>
+                <h2 class="filter-card__title">Отфильтровать ленту</h2>
+            </div>
+            <form method="get" asp-controller="Home" asp-action="Index" class="tag-filter-form">
+                <input
+                    list="tag-options"
+                    name="tag"
+                    value="@Model.SelectedTag"
+                    class="tag-filter-form__input"
+                    placeholder="Например, backend" />
+                <datalist id="tag-options">
+                    @foreach (var tag in Model.AvailableTags)
+                    {
+                        <option value="@tag"></option>
+                    }
+                </datalist>
+
+                <div class="tag-filter-form__actions">
+                    <button type="submit" class="button-primary">Найти</button>
+                    @if (!string.IsNullOrWhiteSpace(Model.SelectedTag))
+                    {
+                        <a asp-controller="Home" asp-action="Index" class="button-secondary">Сбросить</a>
+                    }
+                </div>
+            </form>
+        </section>
+
+        @if (Model.Posts.Count == 0)
+        {
+            <section class="empty-state">
+                <h2>Постов пока нет</h2>
+                <p>Создайте первую запись через админку, чтобы лента и статистика начали заполняться.</p>
+            </section>
+        }
+        else
+        {
+            <div class="post-list">
+                @foreach (var post in Model.Posts)
+                {
+                    <article class="post-card">
+                        <aside class="post-card__rating" aria-label="Рейтинг поста">
+                            <span class="vote-arrow vote-arrow--up">&#9650;</span>
+                            <span class="vote-count vote-count--up">@post.LikesCount</span>
+                            <span class="vote-arrow vote-arrow--down">&#9660;</span>
+                            <span class="vote-count vote-count--down">@post.DislikesCount</span>
+                        </aside>
+
+                        <div class="post-card__body">
+                            <div class="post-card__meta">
+                                <span>@post.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span>
+                                @if (post.UpdatedAtUtc.HasValue)
+                                {
+                                    <span>обновлено @post.UpdatedAtUtc.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span>
+                                }
+                            </div>
+
+                            <h2 class="post-card__title">@post.Title</h2>
+                            <p class="post-card__text">@post.Content</p>
+
+                            @if (!string.IsNullOrWhiteSpace(post.ImageBase64) && !string.IsNullOrWhiteSpace(post.ImageMimeType))
+                            {
+                                <div class="post-card__image-wrap">
+                                    <img
+                                        class="post-card__image"
+                                        src="data:@post.ImageMimeType;base64,@post.ImageBase64"
+                                        alt="@post.Title" />
+                                </div>
+                            }
+
+                            @if (post.Tags.Count > 0)
+                            {
+                                <div class="tag-list">
+                                    @foreach (var tag in post.Tags)
+                                    {
+                                        <a class="tag-pill" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">#@tag</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>

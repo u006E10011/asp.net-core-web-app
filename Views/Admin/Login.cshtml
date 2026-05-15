@@ -1,0 +1,39 @@
+@model DevLog.ViewModels.Admin.AdminLoginViewModel
+@{
+    ViewData["Title"] = "Вход в админку";
+}
+
+<section class="login-shell">
+    <div class="login-card">
+        <div class="login-card__header">
+            <div>
+                <p class="admin-section__eyebrow">Restricted area</p>
+                <h1 class="login-card__title">Вход в админку</h1>
+            </div>
+        </div>
+
+        <form asp-action="Login" asp-controller="Admin" method="post" class="login-form">
+            @Html.AntiForgeryToken()
+            <input asp-for="ReturnUrl" type="hidden" />
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <div>
+                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Username" class="input-control" />
+                <span asp-validation-for="Username" class="field-validation-error"></span>
+            </div>
+
+            <div>
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="input-control" />
+                <span asp-validation-for="Password" class="field-validation-error"></span>
+            </div>
+
+            <button type="submit" class="button-primary">Войти</button>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

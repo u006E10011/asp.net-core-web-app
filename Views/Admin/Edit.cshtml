@@ -1,0 +1,89 @@
+@model DevLog.ViewModels.Admin.AdminPostFormViewModel
+@{
+    var isEdit = Model.Id.HasValue;
+    ViewData["Title"] = isEdit ? "Редактирование поста" : "Создание поста";
+}
+
+<section class="admin-form-card">
+    <div class="admin-shell__header">
+        <div>
+            <p class="admin-section__eyebrow">Admin editor</p>
+            <h1 class="admin-section__title">@(isEdit ? "Редактирование поста" : "Новый пост")</h1>
+            <p class="hint-text">
+                Все поля поста сохраняются в PostgreSQL и доступны для последующего просмотра через SQL-запросы.
+            </p>
+        </div>
+
+        <a asp-action="Index" asp-controller="Admin" class="button-secondary">Назад</a>
+    </div>
+
+    <form
+        asp-action="@(isEdit ? "Edit" : "Create")"
+        asp-controller="Admin"
+        asp-route-id="@Model.Id"
+        method="post"
+        enctype="multipart/form-data"
+        class="admin-form">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="HasExistingImage" type="hidden" />
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <div class="form-grid">
+            <div>
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="input-control" />
+                <span asp-validation-for="Title" class="field-validation-error"></span>
+            </div>
+
+            <div>
+                <label asp-for="Content" class="form-label"></label>
+                <textarea asp-for="Content" class="textarea-control"></textarea>
+                <span asp-validation-for="Content" class="field-validation-error"></span>
+            </div>
+
+            <div>
+                <label asp-for="TagsInput" class="form-label"></label>
+                <input asp-for="TagsInput" class="input-control" placeholder="#backend, #postgres, #docker" />
+                <p class="field-help">Введите теги через запятую. Символ # можно указывать или опускать.</p>
+                <span asp-validation-for="TagsInput" class="field-validation-error"></span>
+            </div>
+
+            <div>
+                <label asp-for="ImageFile" class="form-label"></label>
+                <input asp-for="ImageFile" class="input-control" type="file" accept="image/*" />
+                @if (Model.HasExistingImage)
+                {
+                    <p class="current-image-note">У поста уже есть сохранённое изображение в базе данных.</p>
+                    <label class="checkbox-row">
+                        <input asp-for="RemoveImage" />
+                        <span>Удалить текущее изображение</span>
+                    </label>
+                }
+                <span asp-validation-for="ImageFile" class="field-validation-error"></span>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="LikesCount" class="form-label"></label>
+                    <input asp-for="LikesCount" class="input-control" />
+                    <span asp-validation-for="LikesCount" class="field-validation-error"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="DislikesCount" class="form-label"></label>
+                    <input asp-for="DislikesCount" class="input-control" />
+                    <span asp-validation-for="DislikesCount" class="field-validation-error"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-actions">
+            <button type="submit" class="button-primary">Сохранить</button>
+            <a asp-action="Index" asp-controller="Admin" class="button-secondary">Отмена</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

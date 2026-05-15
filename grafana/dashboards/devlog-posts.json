@@ -1,0 +1,173 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "graphTooltip": 0,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PDS_DEVLOG_POSTGRESQL"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawSql": "SELECT COUNT(*) AS total_posts FROM \"Posts\";",
+          "refId": "A"
+        }
+      ],
+      "title": "Всего постов",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PDS_DEVLOG_POSTGRESQL"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "id": 2,
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawSql": "SELECT SUM(\"LikesCount\") AS total_likes FROM \"Posts\";",
+          "refId": "A"
+        }
+      ],
+      "title": "Сумма лайков",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PDS_DEVLOG_POSTGRESQL"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 3,
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawSql": "SELECT SUM(\"DislikesCount\") AS total_dislikes FROM \"Posts\";",
+          "refId": "A"
+        }
+      ],
+      "title": "Сумма дизлайков",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PDS_DEVLOG_POSTGRESQL"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 4,
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "time_series",
+          "rawSql": "SELECT post_date AS \"time\", post_count AS value FROM vw_daily_post_counts ORDER BY post_date;",
+          "refId": "A"
+        }
+      ],
+      "title": "Публикации по дням",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PDS_DEVLOG_POSTGRESQL"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 5,
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawSql": "SELECT tag_name, post_count FROM vw_tag_post_counts;",
+          "refId": "A"
+        }
+      ],
+      "title": "Посты по тегам",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PDS_DEVLOG_POSTGRESQL"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 6,
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawSql": "SELECT title, created_at_utc, likes_count, dislikes_count, COALESCE(tags, '') AS tags FROM vw_post_overview ORDER BY created_at_utc DESC;",
+          "refId": "A"
+        }
+      ],
+      "title": "Обзор постов",
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": [
+    "devlog"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "DevLog Posts",
+  "uid": "devlog-posts",
+  "version": 1
+}
