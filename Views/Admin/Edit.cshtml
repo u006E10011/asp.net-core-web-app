@@ -1,16 +1,16 @@
 @model DevLog.ViewModels.Admin.AdminPostFormViewModel
 @{
     var isEdit = Model.Id.HasValue;
-    ViewData["Title"] = isEdit ? "Редактирование поста" : "Создание поста";
+    ViewData["Title"] = isEdit ? "Edit" : "Create";
 }
 
 <section class="admin-form-card">
     <div class="admin-shell__header">
         <div>
-            <p class="admin-section__eyebrow">Admin editor</p>
+            @* <p class="admin-section__eyebrow">Admin editor</p> *@
             <h1 class="admin-section__title">@(isEdit ? "Редактирование поста" : "Новый пост")</h1>
             <p class="hint-text">
-                Все поля поста сохраняются в PostgreSQL и доступны для последующего просмотра через SQL-запросы.
+                Все поля поста сохраняются в PostgreSQL и доступны для последующего просмотра через SQL-запросы
             </p>
         </div>
 
@@ -45,7 +45,7 @@
             <div>
                 <label asp-for="TagsInput" class="form-label"></label>
                 <input asp-for="TagsInput" class="input-control" placeholder="#backend, #postgres, #docker" />
-                <p class="field-help">Введите теги через запятую. Символ # можно указывать или опускать.</p>
+                <p class="field-help">Введите теги через запятую</p>
                 <span asp-validation-for="TagsInput" class="field-validation-error"></span>
             </div>
 
@@ -54,7 +54,7 @@
                 <input asp-for="ImageFile" class="input-control" type="file" accept="image/*" />
                 @if (Model.HasExistingImage)
                 {
-                    <p class="current-image-note">У поста уже есть сохранённое изображение в базе данных.</p>
+                    @* <p class="current-image-note">У поста уже есть сохранённое изображение в базе данных</p> *@
                     <label class="checkbox-row">
                         <input asp-for="RemoveImage" />
                         <span>Удалить текущее изображение</span>
@@ -63,7 +63,7 @@
                 <span asp-validation-for="ImageFile" class="field-validation-error"></span>
             </div>
 
-            <div class="row g-3">
+            @* <div class="row g-3">
                 <div class="col-md-6">
                     <label asp-for="LikesCount" class="form-label"></label>
                     <input asp-for="LikesCount" class="input-control" />
@@ -74,7 +74,7 @@
                     <input asp-for="DislikesCount" class="input-control" />
                     <span asp-validation-for="DislikesCount" class="field-validation-error"></span>
                 </div>
-            </div>
+            </div> *@
         </div>
 
         <div class="admin-actions">

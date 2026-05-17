@@ -5,78 +5,78 @@ services:
       dockerfile: Dockerfile
     container_name: devlog-web
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DevLogConnection: Host=postgres;Port=5432;Database=devlog;Username=devlog;Password=devlogpass
-      AdminAuth__Username: admin
-      AdminAuth__Password: devlog-admin
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ConnectionStrings__DevLogConnection: Host=${POSTGRES_HOST};Port=${POSTGRES_INTERNAL_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      AdminAuth__Username: ${ADMIN_USERNAME}
+      AdminAuth__Password: ${ADMIN_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "${WEB_PORT}:8080"
 
   postgres:
-    image: postgres:16-alpine
+    image: postgres:${POSTGRES_IMAGE_TAG}
     container_name: devlog-postgres
     environment:
-      POSTGRES_DB: devlog
-      POSTGRES_USER: devlog
-      POSTGRES_PASSWORD: devlogpass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U devlog -d devlog"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:${POSTGRES_INTERNAL_PORT}"
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
   prometheus:
-    image: prom/prometheus:v2.54.1
+    image: prom/prometheus:${PROMETHEUS_IMAGE_TAG}
     container_name: devlog-prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
-      - "9090:9090"
+      - "${PROMETHEUS_PORT}:9090"
     depends_on:
       - postgres-exporter
       - blackbox-exporter
 
   postgres-exporter:
-    image: prometheuscommunity/postgres-exporter:v0.15.0
+    image: prometheuscommunity/postgres-exporter:${POSTGRES_EXPORTER_IMAGE_TAG}
     container_name: devlog-postgres-exporter
     environment:
-      DATA_SOURCE_NAME: postgresql://devlog:devlogpass@postgres:5432/devlog?sslmode=disable
+      DATA_SOURCE_NAME: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_INTERNAL_PORT}/${POSTGRES_DB}?sslmode=disable
     depends_on:
       postgres:
         condition: service_healthy
     ports:
-      - "9187:9187"
+      - "${POSTGRES_EXPORTER_PORT}:9187"
 
   blackbox-exporter:
-    image: prom/blackbox-exporter:v0.25.0
+    image: prom/blackbox-exporter:${BLACKBOX_EXPORTER_IMAGE_TAG}
     container_name: devlog-blackbox-exporter
     command:
       - "--config.file=/etc/blackbox_exporter/config.yml"
     volumes:
       - ./prometheus/blackbox.yml:/etc/blackbox_exporter/config.yml:ro
     ports:
-      - "9115:9115"
+      - "${BLACKBOX_EXPORTER_PORT}:9115"
 
   grafana:
-    image: grafana/grafana:11.1.0
+    image: grafana/grafana:${GRAFANA_IMAGE_TAG}
     container_name: devlog-grafana
     environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
       - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     ports:
-      - "3000:3000"
+      - "${GRAFANA_PORT}:3000"
     depends_on:
       - postgres
       - prometheus

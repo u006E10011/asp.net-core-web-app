@@ -1,23 +1,22 @@
 @model DevLog.ViewModels.HomeIndexViewModel
 @{
-    ViewData["Title"] = "Главная";
+    ViewData["Title"] = "Main";
 }
 
 <section class="feed-shell">
     <div class="feed-column">
         <div class="page-intro">
-            <p class="page-intro__eyebrow">Developer journal</p>
+            @* <p class="page-intro__eyebrow">Developer journal</p> *@
             <h1 class="page-intro__title">Лента DevLog</h1>
             <p class="page-intro__text">
-                Локальная площадка для записей разработки с хранением контента в PostgreSQL,
-                быстрым поиском по хештегам и визуальным рейтингом постов.
+                Площадка для написания постов, быстрым поиском по хештегам и визуальным рейтингом постов
             </p>
         </div>
 
         <section class="filter-card">
             <div>
-                <p class="filter-card__label">Поиск по хештегу</p>
-                <h2 class="filter-card__title">Отфильтровать ленту</h2>
+                @* <p class="filter-card__label">Поиск</p> *@
+                <h2 class="filter-card__title">Фильтр</h2>
             </div>
             <form method="get" asp-controller="Home" asp-action="Index" class="tag-filter-form">
                 <input
@@ -25,7 +24,7 @@
                     name="tag"
                     value="@Model.SelectedTag"
                     class="tag-filter-form__input"
-                    placeholder="Например, backend" />
+                    placeholder="c#, unity, asp.net core" />
                 <datalist id="tag-options">
                     @foreach (var tag in Model.AvailableTags)
                     {
@@ -47,7 +46,7 @@
         {
             <section class="empty-state">
                 <h2>Постов пока нет</h2>
-                <p>Создайте первую запись через админку, чтобы лента и статистика начали заполняться.</p>
+                <p>Создайте первую запись через панель администрации</p>
             </section>
         }
         else

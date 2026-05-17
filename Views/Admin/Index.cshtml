@@ -1,14 +1,13 @@
 @model DevLog.ViewModels.Admin.AdminIndexViewModel
 @{
-    ViewData["Title"] = "Админка";
+    ViewData["Title"] = "Admin";
 }
 
 <section class="admin-shell">
     <div class="admin-shell__header">
         <div>
-            <p class="admin-section__eyebrow">Content management</p>
-            <h1 class="admin-section__title">Посты DevLog</h1>
-            <p class="hint-text">Управление лентой, тегами, изображениями и счётчиками реакций.</p>
+            @* <p class="admin-section__eyebrow">Content management</p> *@
+            <h1 class="admin-section__title">Посты</h1>
         </div>
 
         <a asp-action="Create" asp-controller="Admin" class="button-primary">Создать пост</a>
@@ -18,7 +17,7 @@
     {
         <div class="empty-state">
             <h2>Постов пока нет</h2>
-            <p>Создайте первую публикацию, чтобы наполнить публичную ленту и базу данных.</p>
+            <p>Создайте первую публикацию</p>
         </div>
     }
     else

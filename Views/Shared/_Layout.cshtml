@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DevLog</title>
+    <title>@ViewData["Title"] - Ryadevn</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -14,14 +14,13 @@
         <header class="site-header">
             <div class="site-header__inner">
                 <a class="site-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <span class="site-brand__mark">D</span>
-                    <span class="site-brand__text">DevLog</span>
+                    <span class="site-brand__mark">R</span>
+                    <span class="site-brand__text">Ryadevn</span>
                 </a>
 
                 @if (User.Identity?.IsAuthenticated == true)
                 {
                     <div class="site-header__actions">
-                        <a class="header-link" asp-controller="Admin" asp-action="Index">Админка</a>
                         <form asp-controller="Admin" asp-action="Logout" method="post">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="header-button">Выйти</button>
@@ -30,7 +29,7 @@
                 }
                 else
                 {
-                    <a class="header-link" asp-controller="Admin" asp-action="Login">Admin</a>
+                    <a class="header-link" asp-controller="Admin" asp-action="Login">Войти</a>
                 }
             </div>
         </header>

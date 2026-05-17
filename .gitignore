@@ -207,6 +207,8 @@ appsettings.Staging.json
 # Docker
 docker-compose.override.yml
 !docker-compose.yml
+.env
+!.env.example
 
 # Monitoring data (если это не нужно в репозитории)
 grafana/data/

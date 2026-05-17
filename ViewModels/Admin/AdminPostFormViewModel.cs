@@ -14,7 +14,7 @@ public class AdminPostFormViewModel
 
     [Required]
     [StringLength(10000)]
-    [Display(Name = "Текст поста")]
+    [Display(Name = "Текст")]
     public string Content { get; set; } = string.Empty;
 
     [Display(Name = "Хештеги")]
