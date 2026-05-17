@@ -210,12 +210,11 @@ docker-compose.override.yml
 .env
 !.env.example
 
-# Monitoring data (если это не нужно в репозитории)
+# Monitoring runtime data
 grafana/data/
 prometheus/data/
-prometheus/prometheus.yml
 
-# Database files (если это не миграции или скрипты инициализации)
+# Database files
 sql/*.db
 *.sqlite
 
