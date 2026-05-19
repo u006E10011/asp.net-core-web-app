@@ -7,7 +7,6 @@
 <section class="admin-form-card">
     <div class="admin-shell__header">
         <div>
-            @* <p class="admin-section__eyebrow">Admin editor</p> *@
             <h1 class="admin-section__title">@(isEdit ? "Редактирование поста" : "Новый пост")</h1>
             <p class="hint-text">
                 Все поля поста сохраняются в PostgreSQL и доступны для последующего просмотра через SQL-запросы
@@ -44,7 +43,7 @@
 
             <div>
                 <label asp-for="TagsInput" class="form-label"></label>
-                <input asp-for="TagsInput" class="input-control" placeholder="#backend, #postgres, #docker" />
+                <input asp-for="TagsInput" class="input-control" placeholder="backend, postgres, docker" />
                 <p class="field-help">Введите теги через запятую</p>
                 <span asp-validation-for="TagsInput" class="field-validation-error"></span>
             </div>
@@ -54,7 +53,6 @@
                 <input asp-for="ImageFile" class="input-control" type="file" accept="image/*" />
                 @if (Model.HasExistingImage)
                 {
-                    @* <p class="current-image-note">У поста уже есть сохранённое изображение в базе данных</p> *@
                     <label class="checkbox-row">
                         <input asp-for="RemoveImage" />
                         <span>Удалить текущее изображение</span>
