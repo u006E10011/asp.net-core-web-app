@@ -21,6 +21,7 @@
                 @if (User.Identity?.IsAuthenticated == true)
                 {
                     <div class="site-header__actions">
+                        <a class="header-link" asp-controller="Admin" asp-action="Index">Посты</a>
                         <form asp-controller="Admin" asp-action="Logout" method="post">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="header-button">Выйти</button>
