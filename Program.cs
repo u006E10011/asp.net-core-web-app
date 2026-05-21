@@ -16,7 +16,12 @@ namespace DevLog
             builder.Services.AddControllersWithViews();
             builder.Services.Configure<AdminAuthOptions>(builder.Configuration.GetSection(AdminAuthOptions.SectionName));
             builder.Services.AddDbContext<DevLogDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DevLogConnection")));
+                options.UseNpgsql(
+                    builder.Configuration.GetConnectionString("DevLogConnection"),
+                    npgsqlOptions => npgsqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorCodesToAdd: null)));
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
